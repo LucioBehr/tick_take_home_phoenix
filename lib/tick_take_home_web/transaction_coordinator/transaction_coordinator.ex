@@ -5,8 +5,19 @@ defmodule TickTakeHomeWeb.TransactionCoordinator do
   alias TickTakeHomeWeb.TransactionCoordinator.Logic
   alias TickTakeHomeWeb.Wallet.Logic, as: WalletLogic
 
-  def start_link(state_data \\ "") do
-    GenServer.start_link(__MODULE__, state_data, name: __MODULE__)
+  def child_spec(opts) do
+    #name = Keyword.fetch!(opts, :name)
+     %{
+      id: :transaction_coordinator,
+      start: {__MODULE__, :start_link, [[name: __MODULE__]]},
+      restart: :permanent,
+      type: :worker
+    }
+  end
+
+  def start_link(opts) do
+    name = Keyword.fetch!(opts, :name)
+    GenServer.start_link(__MODULE__, name, id: name, name: __MODULE__)
   end
 
   @impl true

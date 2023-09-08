@@ -1,5 +1,6 @@
 defmodule TickTakeHome.Application do
   @moduledoc false
+alias TickTakeHomeWeb.TransactionCoordinator
 
   use Application
 
@@ -11,11 +12,10 @@ defmodule TickTakeHome.Application do
       TickTakeHomeWeb.Endpoint,
       {TickTakeHomeWeb.Wallet, name: :wallet_1},
       {TickTakeHomeWeb.Wallet, name: :wallet_2},
-      #{TickTakeHomeWeb.TransactionCoordinator, name: :wallet_1},
-      #{TickTakeHomeWeb.TransactionCoordinator, name: :wallet_2}
+      TickTakeHomeWeb.TransactionCoordinator
     ]
 
-    opts = [strategy: :one_for_one, name: TickTakeHome.Supervisor]
+    opts = [strategy: :one_for_all, name: TickTakeHome.Supervisor]
     Supervisor.start_link(children, opts)
   end
 

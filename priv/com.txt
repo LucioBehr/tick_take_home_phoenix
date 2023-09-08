@@ -1,0 +1,62 @@
+  @doc """
+  Transfer a specific amount of an asset between users within the same wallet.
+  The function accepts a map containing `from_user_id`, `to_user_id`, `asset` and `amount` as keys.
+  It updates the available quantity of that asset for the user in the given state.
+
+  ## Parameters
+    - `params`: A map with the following keys:
+      - `"from_user_id"`: Sender's user's ID.
+      - `"to_user_id"`: Receiver's user's ID.
+      - `"asset"`: The type of asset being deposited.
+      - `"amount"`: The amount of the asset to be deposited.
+    - `state_data`: The current state containing user data.
+
+  ## Returns
+    - `{:ok, message, new_state_data}`: If the deposit was successful.
+    - `:ok`: An atom indicating success.
+    - A string message detailing the deposit made.
+    - The `new_state_data`, which is the updated state after the deposit.
+
+  ## Example usage:
+  transfer_data_1 = %{"from_user_id" => 1, "to_user_id" => 2, "asset" => "BTC", "amount" => 10}
+  state_data_0 = %{ "users" => %{ 1 => %{ "BTC" => %{ "frozen" => 0.0, "available" => 10.0}}}}
+  Wallet.deposit(deposit_data_1, state_data)
+  #=> %{ "users" => %{ 1 => %{ "BTC" => %{ "frozen" => 0.0, "available" => 20.0}}}}
+  """
+
+  @doc """
+    Withdraws a specific amount of an asset for a user.
+
+    This function accepts a map containing the keys: `user_id`, `asset`, and `amount`.
+    It then updates the available balance of that asset for the specified user in the given state.
+
+    If the specified `amount` to withdraw exceeds the available balance for the user, an error will be raised.
+
+    ## Parameters
+
+      - `params`: A map with the following keys:
+        - `"user_id"`: The ID of the user for whom the withdrawal will be processed.
+        - `"asset"`: The type of asset (e.g., "USD", "BTC") being withdrawn.
+        - `"amount"`: The amount of the asset to be withdrawn.
+      - `state_data`: The current state containing data for all users.
+
+    ## Return
+
+      - In case of successful withdrawal:
+        Returns a tuple with the atom `:ok`, a string message detailing the withdrawal, and the updated `state_data`.
+
+      - In case of insufficient balance:
+        Returns a tuple with the atom `:error`, an error message indicating insufficient balance, and the unchanged `state_data`.
+
+    ## Examples
+
+        iex> Wallet.withdraw(%{"user_id" => "123", "asset" => "USD", "amount" => 50}, %{"users" => %{"123" => %{"USD" => %{"available" => 100}}}})
+        {:ok, "Withdrawn 50 USD for user 123", %{"users" => %{"123" => %{"USD" => %{"available" => 50}}}}}
+
+        iex> withdraw(%{"user_id" => "123", "asset" => "USD", "amount" => 150}, %{"users" => %{"123" => %{"USD" => %{"available" => 100}}}})
+        {:error, "Not Enough Balance", %{"users" => %{"123" => %{"USD" => %{"available" => 100}}}}}
+  """
+
+
+alias TickTakeHomeWeb.Wallet.Logic
+alias TickTakeHome.Repo

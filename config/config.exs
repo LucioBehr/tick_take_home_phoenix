@@ -7,6 +7,12 @@
 # General application configuration
 import Config
 
+config :tick_take_home, TickTakeHomeWeb.Repo,
+  database: "tick_take_home_repo",
+  username: "user",
+  password: "pass",
+  hostname: "localhost"
+
 config :tick_take_home,
   ecto_repos: [TickTakeHome.Repo]
 
