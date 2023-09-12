@@ -1,4 +1,4 @@
-defmodule TickTakeHome do
+defmodule Legacy.TickTakeHome do
   use GenServer
   # use File
   ### comandos para teste

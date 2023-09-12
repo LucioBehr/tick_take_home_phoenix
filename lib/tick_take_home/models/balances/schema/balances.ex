@@ -1,4 +1,4 @@
-defmodule TickTakeHome.Models.Balances do
+defmodule TickTakeHome.Models.Balances.Schema.Balance do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,8 +7,8 @@ defmodule TickTakeHome.Models.Balances do
     field :available, :float, default: 0.0
     field :frozen, :float, default: 0.0
 
-    belongs_to :user, TickTakeHome.Models.Users
-    belongs_to :asset, TickTakeHome.Models.Assets, type: :string
+    belongs_to :user, TickTakeHome.Models.Users.Schema.User
+    belongs_to :asset, TickTakeHome.Models.Assets.Schema.Asset, type: :string
     timestamps()
   end
 

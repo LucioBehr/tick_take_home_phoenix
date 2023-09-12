@@ -1,4 +1,4 @@
-defmodule TickTakeHome.Models.Assets do
+defmodule TickTakeHome.Models.Assets.Schema.Asset do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,7 +7,7 @@ defmodule TickTakeHome.Models.Assets do
   schema "assets" do
     field :id, :string, primary_key: true
 
-    has_many :balances, TickTakeHome.Models.Balances, references: :id, foreign_key: :asset_id
+    has_many :balances, TickTakeHome.Models.Balances.Schema.Balance, references: :id, foreign_key: :asset_id
 
     timestamps()
   end
