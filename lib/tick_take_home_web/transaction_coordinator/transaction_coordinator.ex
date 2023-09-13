@@ -6,8 +6,8 @@ defmodule TickTakeHomeWeb.TransactionCoordinator do
   alias TickTakeHomeWeb.Wallet.Logic, as: WalletLogic
 
   def child_spec(opts) do
-    #name = Keyword.fetch!(opts, :name)
-     %{
+    # name = Keyword.fetch!(opts, :name)
+    %{
       id: :transaction_coordinator,
       start: {__MODULE__, :start_link, [[name: __MODULE__]]},
       restart: :permanent,
@@ -51,6 +51,7 @@ defmodule TickTakeHomeWeb.TransactionCoordinator do
       case Logic.execute_step(operation, last_transaction["id"]) do
         {:ok, _result} ->
           {:cont, :ok}
+
         error = {:error, _} ->
           {:halt, error}
       end
@@ -61,7 +62,7 @@ defmodule TickTakeHomeWeb.TransactionCoordinator do
         |> Logic.finalize_transaction()
         |> Store.write_file()
 
-       _ ->
+      _ ->
         # Tell wallets to revert their state if their coordinator_id == last_transaction["id"]
         operations
         |> Enum.map(fn operation ->
@@ -94,7 +95,8 @@ defmodule TickTakeHomeWeb.TransactionCoordinator do
     {:reply, :ok, state}
   end
 end
-  # %{"asset" => asset, "from_wallet_id" => from_wallet_id, "from_user_id" => from_user_id, "to_wallet_id" => to_wallet_id, "to_user_id" => to_user_id, "amount" => amount} =
+
+# %{"asset" => asset, "from_wallet_id" => from_wallet_id, "from_user_id" => from_user_id, "to_wallet_id" => to_wallet_id, "to_user_id" => to_user_id, "amount" => amount} =
 
 ################################################################################### 3
 

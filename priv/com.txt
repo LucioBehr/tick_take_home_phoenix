@@ -60,3 +60,56 @@
 
 alias TickTakeHomeWeb.Wallet.Logic
 alias TickTakeHome.Repo
+
+
+
+
+def validate_input(%{"user_id" => user_id, "wallet_id" => wallet_id, "asset" => asset}) do
+  case {Assets.get_asset(asset), Users.get_user(user_id), Wallet.get_wallet(wallet_id)} do
+    {nil, _, _} -> {:error, :missing_asset}
+    {_, nil, _} -> {:error, :missing_user}
+    {_, _, nil} -> {:error, :missing_wallet}
+    _ -> 
+      if Balances.get_balance(user_id, asset) do
+        :ok
+      else
+        {:error, :missing_balance}
+      end
+  end
+end
+
+def deposit(params = %{"user_id" => user_id, "asset" => asset, "amount" => amount, "wallet_id" => wallet_id}) do
+  case validate_input(params) do
+    {:error, :missing_user} ->
+      Users.create_user(user_id, wallet_id)
+      insert_balance(params)
+
+    {:error, :missing_balance} ->
+      insert_balance(params)
+
+    :ok ->
+      Balances.update_balance(Map.merge(params, %{"operation" => :deposit}))
+
+    error -> error
+  end
+end
+
+defp insert_balance(%{"user_id" => user_id, "asset" => asset, "amount" => amount}) do
+  Balances.insert_balance(%{
+    "user_id" => user_id,
+    "asset_id" => asset,
+    "available" => amount
+  })
+end
+
+def withdraw(params), do: handle_operation(params, :withdraw)
+def freeze(params), do: handle_operation(params, :freeze)
+def unfreeze(params), do: handle_operation(params, :unfreeze)
+
+defp handle_operation(params, operation) do
+  case validate_input(params) do
+    :ok ->
+      Balances.update_balance(Map.merge(params, %{"operation" => operation}))
+    error -> error
+  end
+end

@@ -1,5 +1,4 @@
 defmodule TickTakeHomeWeb.TransactionCoordinator.Repositories.Store do
-
   @doc """
   Reads and decodes the contents of the 'log_coordinator.json' file.
 
@@ -35,7 +34,6 @@ defmodule TickTakeHomeWeb.TransactionCoordinator.Repositories.Store do
       {:error, _} -> write_file(%{"last_complete_id" => 0, "transactions_list" => []})
     end
   end
-
 
   @doc """
   Writes the provided data to 'log_coordinator.json' after encoding it as JSON.

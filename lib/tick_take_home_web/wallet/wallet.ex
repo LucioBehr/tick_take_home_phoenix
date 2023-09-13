@@ -4,7 +4,6 @@ defmodule TickTakeHomeWeb.Wallet do
   alias TickTakeHomeWeb.Wallet.Logic
   alias TickTakeHomeWeb.Wallet.Repositories.Store
 
-
   @allowed_operations [
     :deposit,
     :revert_deposit,
@@ -17,12 +16,13 @@ defmodule TickTakeHomeWeb.Wallet do
 
   @revert_operations [
     :revert_deposit,
-    :revert_withdraw,
+    :revert_withdraw
   ]
 
   def child_spec(opts) do
     name = Keyword.fetch!(opts, :name)
-     %{
+
+    %{
       id: name,
       start: {__MODULE__, :start_link, [[name: name]]},
       restart: :temporary,
@@ -69,13 +69,21 @@ defmodule TickTakeHomeWeb.Wallet do
         end)
 
   @impl true
-  def handle_call({operation_name, args, coordinator_id}, _from, %{"coordinator_id" => wallet_coordinator_id} = state_data) when operation_name in @revert_operations do
+  def handle_call(
+        {operation_name, args, coordinator_id},
+        _from,
+        %{"coordinator_id" => wallet_coordinator_id} = state_data
+      )
+      when operation_name in @revert_operations do
     case wallet_coordinator_id == coordinator_id do
       true ->
-        tap(process_persistent_operation({operation_name, args}, state_data), fn {_, _, state_data} ->
+        tap(process_persistent_operation({operation_name, args}, state_data), fn {_, _,
+                                                                                  state_data} ->
           Store.write(%{state_data | "coordinator_id" => coordinator_id - 1})
         end)
-      false -> {:reply, {:ok, "Already reverted"}, state_data}
+
+      false ->
+        {:reply, {:ok, "Already reverted"}, state_data}
     end
   end
 

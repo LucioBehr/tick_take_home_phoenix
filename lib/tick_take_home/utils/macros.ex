@@ -1,5 +1,4 @@
 defmodule TickTakeHome.Macros do
-
   defmacro guard_valid_name(prefix, max_servers, args, do: expression, else: else_expression) do
     quote do
       if is_valid_name?(unquote(prefix), unquote(max_servers), unquote(args)["name"]) do
@@ -11,7 +10,6 @@ defmodule TickTakeHome.Macros do
       end
     end
   end
-
 
   def is_valid_name?(prefix, max_servers, name) do
     case String.trim_leading(name, prefix <> "_") |> Integer.parse() do

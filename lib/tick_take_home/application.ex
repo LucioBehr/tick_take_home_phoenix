@@ -1,6 +1,6 @@
 defmodule TickTakeHome.Application do
   @moduledoc false
-alias TickTakeHomeWeb.TransactionCoordinator
+  alias TickTakeHomeWeb.TransactionCoordinator
 
   use Application
 

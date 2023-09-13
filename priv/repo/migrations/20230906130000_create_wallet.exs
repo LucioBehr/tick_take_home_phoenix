@@ -3,8 +3,7 @@ defmodule TickTakeHome.Repo.Migrations.CreateWallet do
 
   def change do
     create table(:wallets) do
-
-    timestamps()
+      timestamps()
     end
   end
 end

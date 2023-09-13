@@ -2,7 +2,7 @@ defmodule TickTakeHome.Models.Balances.Schema.Balance do
   use Ecto.Schema
   import Ecto.Changeset
 
-  #@primary_key {:id, :binary_id, autogenerate: true}
+  # @primary_key {:id, :binary_id, autogenerate: true}
   schema "balances" do
     field :available, :float, default: 0.0
     field :frozen, :float, default: 0.0

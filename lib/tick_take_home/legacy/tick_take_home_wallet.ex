@@ -66,8 +66,6 @@
 #   #   end
 #   # end
 
-
-
 #   def validate_datas(%{user_id: user_id, wallet_id: wallet_id, asset: asset}) do
 #     case {Repo.get(Assets, asset), Repo.get(Users, user_id), Repo.get(Wallets, wallet_id)} do
 #       {nil, _, _} -> {:error, :missing_asset}
@@ -155,8 +153,6 @@
 
 #     end
 #   end
-
-
 
 #   #Repo.insert!(Balances.changeset(%Balances{}, %{"user_id" => user_id, "asset_id" => asset, "available" => amount}))
 
@@ -383,8 +379,6 @@
 #      }
 #    }
 #  }
-
-
 
 #  deposit_data = %{
 #    "user_id" => 1,

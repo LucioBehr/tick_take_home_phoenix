@@ -9,5 +9,4 @@ defmodule TickTakeHome.Models.Assets.Repositories.Database do
   def get_asset(id) do
     Repo.get(Asset, id)
   end
-
 end

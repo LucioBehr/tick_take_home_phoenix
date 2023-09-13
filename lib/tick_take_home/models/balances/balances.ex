@@ -13,36 +13,51 @@ defmodule TickTakeHome.Models.Balances do
     Database.update_balance(balance)
   end
 
-  def update_balance(%{"user_id" => user_id, "asset" => asset, "amount" => amount, "operation" => :withdraw} = balance) do
-    case get_balance(user_id, asset) |>IO.inspect() do
+  def update_balance(
+        %{"user_id" => user_id, "asset" => asset, "amount" => amount, "operation" => :withdraw} =
+          balance
+      ) do
+    case get_balance(user_id, asset) do
       %{available: available} when available >= amount ->
         Database.update_balance(balance)
-      %{available: available} ->
+
+      %{available: _available} ->
         {:error, :no_funds}
+
       _ ->
-          {:error, :no_balance}
+        {:error, :no_balance}
     end
   end
 
-  def update_balance(%{"user_id" => user_id, "asset" => asset, "amount" => amount, "operation" => :freeze} = balance) do
+  def update_balance(
+        %{"user_id" => user_id, "asset" => asset, "amount" => amount, "operation" => :freeze} =
+          balance
+      ) do
     case get_balance(user_id, asset) do
       %{available: available} when available >= amount ->
         Database.update_balance(balance)
-      %{available: available} ->
-          {:error, :no_funds}
+
+      %{available: _available} ->
+        {:error, :no_funds}
+
       _ ->
         {:error, :no_balance}
-      end
     end
+  end
 
-  def update_balance(%{"user_id" => user_id, "asset" => asset, "amount" => amount, "operation" => :unfreeze} = balance) do
+  def update_balance(
+        %{"user_id" => user_id, "asset" => asset, "amount" => amount, "operation" => :unfreeze} =
+          balance
+      ) do
     case get_balance(user_id, asset) do
-    %{frozen: frozen} when frozen >= amount ->
-      Database.update_balance(balance)
-    %{frozen: frozen} ->
+      %{frozen: frozen} when frozen >= amount ->
+        Database.update_balance(balance)
+
+      %{frozen: _frozen} ->
         {:error, :no_funds}
-    _ ->
-      {:error, :no_balance}
+
+      _ ->
+        {:error, :no_balance}
     end
   end
 end

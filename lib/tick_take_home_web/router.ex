@@ -18,6 +18,6 @@ defmodule TickTakeHomeWeb.Router do
 
     post "/start_transaction", TransactionCoordinatorController, :start_transaction
     get "/get_state", TransactionCoordinatorController, :get_state
-    #get "/", PageController, :home
+    # get "/", PageController, :home
   end
 end

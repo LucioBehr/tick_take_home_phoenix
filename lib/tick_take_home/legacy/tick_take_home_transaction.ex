@@ -1,5 +1,4 @@
 defmodule TickTakeHomeWeb.TransactionCoordinator.Logic do
-
   @doc """
   Starts a new transaction based on the provided wallet transfer data.
 
@@ -79,45 +78,45 @@ defmodule TickTakeHomeWeb.TransactionCoordinator.Logic do
   end
 
   @doc """
-  Parses transaction details to create a list of operations: withdrawal and deposit.
+    Parses transaction details to create a list of operations: withdrawal and deposit.
 
-  This function generates a list of two operations based on the provided transaction details:
-  1. A withdrawal from the source wallet (`from_wallet_id`).
-  2. A deposit into the destination wallet (`to_wallet_id`).
+    This function generates a list of two operations based on the provided transaction details:
+    1. A withdrawal from the source wallet (`from_wallet_id`).
+    2. A deposit into the destination wallet (`to_wallet_id`).
 
-  ## Parameters
+    ## Parameters
 
-    - A map with the following keys:
-      - `"asset"`: The type of asset (e.g., "USD", "BTC") involved in the transaction.
-      - `"from_wallet_id"`: The ID of the source wallet from which the amount will be withdrawn.
-      - `"from_user_id"`: The ID of the user associated with the source wallet.
-      - `"to_wallet_id"`: The ID of the destination wallet where the amount will be deposited.
-      - `"to_user_id"`: The ID of the user associated with the destination wallet.
-      - `"amount"`: The amount of the asset to be transferred.
+      - A map with the following keys:
+        - `"asset"`: The type of asset (e.g., "USD", "BTC") involved in the transaction.
+        - `"from_wallet_id"`: The ID of the source wallet from which the amount will be withdrawn.
+        - `"from_user_id"`: The ID of the user associated with the source wallet.
+        - `"to_wallet_id"`: The ID of the destination wallet where the amount will be deposited.
+        - `"to_user_id"`: The ID of the user associated with the destination wallet.
+        - `"amount"`: The amount of the asset to be transferred.
 
-  ## Return
+    ## Return
 
-    - Returns a list containing two maps:
-      1. The withdrawal operation with details such as event type (`:withdraw`), process name based on the source wallet, and the arguments (asset type, amount, user ID).
-      2. The deposit operation with details such as event type (`:deposit`), process name based on the destination wallet, and the arguments (asset type, amount, user ID).
+      - Returns a list containing two maps:
+        1. The withdrawal operation with details such as event type (`:withdraw`), process name based on the source wallet, and the arguments (asset type, amount, user ID).
+        2. The deposit operation with details such as event type (`:deposit`), process name based on the destination wallet, and the arguments (asset type, amount, user ID).
 
-  ## Example usage:
+    ## Example usage:
 
-      iex> parse_transactions(%{"asset" => "BTC", "from_wallet_id" => "001", "from_user_id" => "userA", "to_wallet_id" => "002", "to_user_id" => "userB", "amount" => 1.5})
-      [
-        %{
-          "event" => :withdraw,
-          "process_name" => :"wallet_001",
-          "args" => %{"asset" => "BTC", "amount" => 1.5, "user_id" => "userA"}
-        },
-        %{
-          "event" => :deposit,
-          "process_name" => :"wallet_002",
-          "args" => %{"asset" => "BTC", "amount" => 1.5, "user_id" => "userB"}
-        }
-      ]
+        iex> parse_transactions(%{"asset" => "BTC", "from_wallet_id" => "001", "from_user_id" => "userA", "to_wallet_id" => "002", "to_user_id" => "userB", "amount" => 1.5})
+        [
+          %{
+            "event" => :withdraw,
+            "process_name" => :"wallet_001",
+            "args" => %{"asset" => "BTC", "amount" => 1.5, "user_id" => "userA"}
+          },
+          %{
+            "event" => :deposit,
+            "process_name" => :"wallet_002",
+            "args" => %{"asset" => "BTC", "amount" => 1.5, "user_id" => "userB"}
+          }
+        ]
 
-"""
+  """
   def parse_transactions(%{
         "asset" => asset,
         "from_wallet_id" => from_wallet_id,
@@ -141,33 +140,33 @@ defmodule TickTakeHomeWeb.TransactionCoordinator.Logic do
   end
 
   @doc """
-  Sends a call to a GenServer to execute a specific event.
+    Sends a call to a GenServer to execute a specific event.
 
-  This function takes an operation map detailing an event, the GenServer's process name, and the associated arguments. It then sends a call to the specified GenServer, instructing it to execute the event.
+    This function takes an operation map detailing an event, the GenServer's process name, and the associated arguments. It then sends a call to the specified GenServer, instructing it to execute the event.
 
-  ## Parameters
+    ## Parameters
 
-    - A map with the following keys:
-      - `"event"`: The type of event (e.g., `:deposit`, `:withdraw`) to be executed by the GenServer.
-      - `"process_name"`: The name (or identifier) of the GenServer that will handle the event.
-      - `"args"`: A map containing the arguments required to execute the event.
-    - `coordinator_id`: An identifier associated with the coordinator or initiating process.
+      - A map with the following keys:
+        - `"event"`: The type of event (e.g., `:deposit`, `:withdraw`) to be executed by the GenServer.
+        - `"process_name"`: The name (or identifier) of the GenServer that will handle the event.
+        - `"args"`: A map containing the arguments required to execute the event.
+      - `coordinator_id`: An identifier associated with the coordinator or initiating process.
 
-  ## Return
+    ## Return
 
-    - Returns the result of the GenServer call, which could vary depending on the handling of the event in the specified GenServer.
+      - Returns the result of the GenServer call, which could vary depending on the handling of the event in the specified GenServer.
 
-  ## Notes
+    ## Notes
 
-    - The behavior of this function largely depends on the implementation of the GenServer associated with `process_name` and how it handles the specified event.
+      - The behavior of this function largely depends on the implementation of the GenServer associated with `process_name` and how it handles the specified event.
 
-  ## Example usage:
+    ## Example usage:
 
-      iex> execute_step(%{"event" => :deposit, "process_name" => :my_wallet, "args" => %{"amount" => 100}}, 2)
-      {:ok, "Deposited 100 units"}
-    execute_step calls TickTakeHome.Wallet.handle_call with the first argument having 3 parameters
-    It changes the wallet's state_data and the coordinator_id in the .json file.
-"""
+        iex> execute_step(%{"event" => :deposit, "process_name" => :my_wallet, "args" => %{"amount" => 100}}, 2)
+        {:ok, "Deposited 100 units"}
+      execute_step calls TickTakeHome.Wallet.handle_call with the first argument having 3 parameters
+      It changes the wallet's state_data and the coordinator_id in the .json file.
+  """
   def execute_step(
         %{"event" => event, "process_name" => process_name, "args" => args},
         coordinator_id
@@ -176,42 +175,41 @@ defmodule TickTakeHomeWeb.TransactionCoordinator.Logic do
   end
 
   def revert_step(
-    %{"event" => event, "process_name" => process_name, "args" => args},
-    coordinator_id
-  ) do
+        %{"event" => event, "process_name" => process_name, "args" => args},
+        coordinator_id
+      ) do
     GenServer.call(process_name, {:"revert_#{event}", args, coordinator_id})
   end
 
-
   @doc """
-  Finalizes the most recent transaction in the state's transaction list.
+    Finalizes the most recent transaction in the state's transaction list.
 
-  This function updates the status of the most recent (or the first) transaction in the `transactions_list` to "finished". It also sets the `last_complete_id` field in the state to the ID of this recently finalized transaction.
+    This function updates the status of the most recent (or the first) transaction in the `transactions_list` to "finished". It also sets the `last_complete_id` field in the state to the ID of this recently finalized transaction.
 
-  ## Parameters
+    ## Parameters
 
-    - A map with a key `"transactions_list"`:
-      - `"transactions_list"`: A list where the first element is the most recent transaction (to be finalized). This transaction should at least have an `"id"` field. The remaining elements are other past transactions.
+      - A map with a key `"transactions_list"`:
+        - `"transactions_list"`: A list where the first element is the most recent transaction (to be finalized). This transaction should at least have an `"id"` field. The remaining elements are other past transactions.
 
-  ## Return
+    ## Return
 
-    - Returns an updated state where:
-      1. The status of the most recent transaction is set to "finished".
-      2. The `last_complete_id` is updated to the ID of the recently finalized transaction.
+      - Returns an updated state where:
+        1. The status of the most recent transaction is set to "finished".
+        2. The `last_complete_id` is updated to the ID of the recently finalized transaction.
 
-  ## Notes
+    ## Notes
 
-    - This function assumes that the `transactions_list` is ordered such that the most recent transaction is at the beginning of the list.
+      - This function assumes that the `transactions_list` is ordered such that the most recent transaction is at the beginning of the list.
 
-  ## Example
+    ## Example
 
-      iex> finalize_transaction(%{"transactions_list" => [%{"id" => 3, "status" => "pending"}, %{"id" => 2}, %{"id" => 1}]})
-      %{
-        "transactions_list" => [%{"id" => 3, "status" => "finished"}, %{"id" => 2}, %{"id" => 1}],
-        "last_complete_id" => 3
-      }
+        iex> finalize_transaction(%{"transactions_list" => [%{"id" => 3, "status" => "pending"}, %{"id" => 2}, %{"id" => 1}]})
+        %{
+          "transactions_list" => [%{"id" => 3, "status" => "finished"}, %{"id" => 2}, %{"id" => 1}],
+          "last_complete_id" => 3
+        }
 
-"""
+  """
   def finalize_transaction(
         %{"transactions_list" => [%{"id" => id} = last_transaction | rest_transactions]} = state
       ),
