@@ -1,4 +1,4 @@
-defmodule TickTakeHomeWeb.TransactionCoordinator.Repositories.Store do
+defmodule Legacy.TickTakeHomeWeb.TransactionCoordinator.Repositories.Store do
   @doc """
   Reads and decodes the contents of the 'log_coordinator.json' file.
 

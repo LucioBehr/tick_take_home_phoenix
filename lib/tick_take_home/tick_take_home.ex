@@ -1,20 +1,20 @@
 defmodule TickTakeHome do
   alias TickTakeHome.Models.{Wallet, Balances, Assets, Users}
 
-  def validate_datas(%{"user_id" => user_id, "wallet_id" => wallet_id, "asset" => asset}) do
-    case {Assets.get_asset(asset), Users.get_user(user_id), Wallet.get_wallet(wallet_id),
-          Balances.get_balance(user_id, asset)} do
-      {nil, _, _, _} -> {:error, :missing_asset}
-      {_, _, nil, _} -> {:error, :missing_wallet}
-      {_, nil, _, _} -> {:error, :missing_user}
-      {_, _, _, nil} -> {:error, :missing_balance}
-      # tudo ok
+  def validate_datas(%{"user_id" => user_id, "asset" => asset}) do
+    case {Assets.get_asset(asset), Users.get_user(user_id), Balances.get_balance(user_id, asset)} do
+      {nil, _, _} -> {:error, :missing_asset}
+      {_, nil, _} -> {:error, :missing_user}
+      {_, _, {:error, :no_balance}} -> {:error, :no_balance}
       _ -> :ok
     end
   end
 
   def create_user(wallet_id) do
-    Users.create_user(wallet_id)
+    case Wallet.get_wallet(wallet_id) do
+      nil -> {:error, :missing_wallet}
+      _ ->  Users.create_user(wallet_id)
+    end
   end
 
   def deposit(
@@ -25,12 +25,12 @@ defmodule TickTakeHome do
           "wallet_id" => wallet_id
         } = params
       ) do
-    case validate_datas(%{"user_id" => user_id, "wallet_id" => wallet_id, "asset" => asset}) do
+    case validate_datas(%{"user_id" => user_id, "asset" => asset}) do
       {:error, :missing_user} ->
         Users.create_user(user_id, wallet_id)
         insert_balance(params)
 
-      {:error, :missing_balance} ->
+      {:error, :no_balance} ->
         insert_balance(params)
 
       :ok ->
@@ -44,6 +44,19 @@ defmodule TickTakeHome do
   def withdraw(params), do: handle_operation(params, :withdraw)
   def freeze(params), do: handle_operation(params, :freeze)
   def unfreeze(params), do: handle_operation(params, :unfreeze)
+
+  def transfer(%{"from_user_id" => from_user_id, "to_user_id" => to_user_id, "asset" => asset, "amount" => _amount} = params) do
+    case {validate_datas(%{"user_id" => from_user_id, "asset" => asset}), Users.get_user(to_user_id)} do
+      {{:error, reason}, _} ->
+        {:error, reason}
+
+      {:ok, nil} ->
+        {:error, :missing_user}
+
+      {:ok, _} ->
+        Balances.transfer(params)
+    end
+  end
 
   defp handle_operation(params, operation) do
     case validate_datas(params) do

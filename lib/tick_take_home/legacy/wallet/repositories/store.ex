@@ -1,4 +1,4 @@
-defmodule TickTakeHomeWeb.Wallet.Repositories.Store do
+defmodule Legacy.TickTakeHomeWeb.Wallet.Repositories.Store do
   def read(name) do
     # unless File.exists?(path), do:
     File.read("state_#{name}.json")

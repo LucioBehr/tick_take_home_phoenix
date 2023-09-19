@@ -1,4 +1,4 @@
-defmodule TickTakeHomeWeb.Wallet do
+defmodule Legacy.TickTakeHomeWeb.Wallet do
   use GenServer
 
   alias TickTakeHomeWeb.Wallet.Logic

@@ -1,7 +1,6 @@
 defmodule TickTakeHome.Models.Users.Repositories.Database do
   alias TickTakeHome.Models.Users.Schema.User
   alias TickTakeHome.Repo
-  import Ecto.Query
   # create, get
 
   def create_user(wallet_id) do

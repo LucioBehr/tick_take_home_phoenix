@@ -3,7 +3,7 @@ defmodule TickTakeHome.Models.Users.Schema.User do
   import Ecto.Changeset
 
   schema "users" do
-    belongs_to :wallet, TickTakeHome.Models.Wallets.Schema.Wallet
+    belongs_to :wallet, TickTakeHome.Models.Wallet.Schema.Wallet, foreign_key: :wallet_id
 
     has_many :balances, TickTakeHome.Models.Balances.Schema.Balance, foreign_key: :user_id
     # has_many :asset, TickTakeHome.Models.Assets.Schema.Asset

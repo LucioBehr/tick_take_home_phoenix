@@ -4,7 +4,10 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
   import Ecto.Query
 
   def get_balance(user_id, asset) do
-    Repo.one(from b in Balance, where: b.user_id == ^user_id and b.asset_id == ^asset)
+    case Repo.one(from b in Balance, where: b.user_id == ^user_id and b.asset_id == ^asset)  do
+      nil -> {:error, :no_balance}
+      balance -> {:ok, balance}
+    end
   end
 
   def insert_balance(%{"user_id" => user_id, "asset_id" => asset, "available" => amount}) do
@@ -23,7 +26,7 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
         "amount" => amount,
         "operation" => operation
       }) do
-    balance = get_balance(user_id, asset)
+    {:ok, balance} = get_balance(user_id, asset)
 
     case operation do
       :deposit ->
@@ -51,10 +54,10 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
   end
 
   #
-  def transfer(sender_id, receiver_id, asset_id, amount) when amount > 0 do
+  def transfer(%{"from_user_id" => from_user_id, "to_user_id" => to_user_id, "asset" => asset, "amount" => amount}) when amount > 0 do
     Repo.transaction(fn ->
-      deduct_from_sender(sender_id, asset_id, amount)
-      add_to_receiver(receiver_id, asset_id, amount)
+      deduct_from_sender(from_user_id, asset, amount)
+      add_to_receiver(to_user_id, asset, amount)
     end)
   end
 

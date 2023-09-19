@@ -45,6 +45,13 @@ config :esbuild,
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
+  config :brod, clients: [
+    kafka_client: [
+      endpoints: [{"localhost", 9092}],
+      auto_start_producers: true
+    ]
+  ]
+
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.3.2",

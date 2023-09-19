@@ -1,4 +1,4 @@
-defmodule TickTakeHomeWeb.TransactionCoordinator do
+defmodule Legacy.TickTakeHomeWeb.TransactionCoordinator do
   use GenServer
 
   alias TickTakeHomeWeb.TransactionCoordinator.Repositories.Store

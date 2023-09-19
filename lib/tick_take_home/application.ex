@@ -10,9 +10,9 @@ defmodule TickTakeHome.Application do
       TickTakeHome.Repo,
       {Phoenix.PubSub, name: TickTakeHome.PubSub},
       TickTakeHomeWeb.Endpoint,
-      {TickTakeHomeWeb.Wallet, name: :wallet_1},
-      {TickTakeHomeWeb.Wallet, name: :wallet_2},
-      TickTakeHomeWeb.TransactionCoordinator
+      # {TickTakeHomeWeb.Wallet, name: :wallet_1},
+      # {TickTakeHomeWeb.Wallet, name: :wallet_2},
+      # TickTakeHomeWeb.TransactionCoordinator
     ]
 
     opts = [strategy: :one_for_all, name: TickTakeHome.Supervisor]
