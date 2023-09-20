@@ -9,8 +9,12 @@ defmodule TickTakeHome.Models.Balances do
     Database.insert_balance(balance)
   end
 
-  def update_balance(%{"user_id" => user_id, "asset" => asset, "amount" => amount, "operation" => operation} = balance) do
+  def update_balance(
+        %{"user_id" => user_id, "asset" => asset, "amount" => _amount, "operation" => operation} =
+          balance
+      ) do
     {_, user_balance} = get_balance(user_id, asset)
+
     case get_balance(user_id, asset) do
       {:ok, _struct} ->
         case operation do
@@ -20,6 +24,7 @@ defmodule TickTakeHome.Models.Balances do
           :unfreeze -> do_update_with_check(user_balance.frozen, balance)
           _ -> {:error, :unsupported_operation}
         end
+
       {:error, _} ->
         {:error, :no_balance}
     end
@@ -32,11 +37,21 @@ defmodule TickTakeHome.Models.Balances do
     end
   end
 
-  def transfer(%{"from_user_id" => from_user_id, "to_user_id" => to_user_id, "asset" => asset, "amount" => amount}) do
+  def transfer(%{
+        "from_user_id" => from_user_id,
+        "to_user_id" => to_user_id,
+        "asset" => asset,
+        "amount" => amount
+      }) do
     case get_balance(from_user_id, asset) do
-      #{:ok, %{available: available}}
+      # {:ok, %{available: available}}
       {:ok, %{available: available}} when available >= amount ->
-        Database.transfer(%{"from_user_id" => from_user_id, "to_user_id" => to_user_id, "asset" => asset, "amount" => amount})
+        Database.transfer(%{
+          "from_user_id" => from_user_id,
+          "to_user_id" => to_user_id,
+          "asset" => asset,
+          "amount" => amount
+        })
 
       {:ok, %{available: _available}} ->
         {:error, :no_funds}

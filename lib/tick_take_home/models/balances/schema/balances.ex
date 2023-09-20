@@ -16,6 +16,8 @@ defmodule TickTakeHome.Models.Balances.Schema.Balance do
     balance
     |> cast(params, [:available, :frozen, :user_id, :asset_id])
     |> validate_required([:user_id, :asset_id])
+    |> foreign_key_constraint(:user_id, name: "balances_user_id_fkey")
+    |> foreign_key_constraint(:asset_id, name: "balances_asset_id_fkey")
   end
 
   def fields(), do: __schema__(:fields)

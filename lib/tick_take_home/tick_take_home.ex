@@ -13,7 +13,7 @@ defmodule TickTakeHome do
   def create_user(wallet_id) do
     case Wallet.get_wallet(wallet_id) do
       nil -> {:error, :missing_wallet}
-      _ ->  Users.create_user(wallet_id)
+      _ -> Users.create_user(wallet_id)
     end
   end
 
@@ -45,8 +45,16 @@ defmodule TickTakeHome do
   def freeze(params), do: handle_operation(params, :freeze)
   def unfreeze(params), do: handle_operation(params, :unfreeze)
 
-  def transfer(%{"from_user_id" => from_user_id, "to_user_id" => to_user_id, "asset" => asset, "amount" => _amount} = params) do
-    case {validate_datas(%{"user_id" => from_user_id, "asset" => asset}), Users.get_user(to_user_id)} do
+  def transfer(
+        %{
+          "from_user_id" => from_user_id,
+          "to_user_id" => to_user_id,
+          "asset" => asset,
+          "amount" => _amount
+        } = params
+      ) do
+    case {validate_datas(%{"user_id" => from_user_id, "asset" => asset}),
+          Users.get_user(to_user_id)} do
       {{:error, reason}, _} ->
         {:error, reason}
 

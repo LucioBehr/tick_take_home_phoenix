@@ -45,7 +45,8 @@ config :esbuild,
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
-  config :brod, clients: [
+config :brod,
+  clients: [
     kafka_client: [
       endpoints: [{"localhost", 9092}],
       auto_start_producers: true

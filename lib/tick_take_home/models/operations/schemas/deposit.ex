@@ -1,4 +1,4 @@
-defmodule TickTakeHome.Models.KafkaMessages.Schema.KafkaDeposit do
+defmodule TickTakeHome.Models.Operations.Schemas.Deposit do
   use Ecto.Schema
   import Ecto.Changeset
   @required_params [:user_id, :asset, :amount, :wallet_id]
@@ -11,7 +11,6 @@ defmodule TickTakeHome.Models.KafkaMessages.Schema.KafkaDeposit do
     field :asset, :string
     field :amount, :float
     field :operation, :string, default: "deposit"
-
   end
 
   def changeset(message, attrs) do

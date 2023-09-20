@@ -1,5 +1,6 @@
 defmodule TickTakeHomeWeb.Router do
   use TickTakeHomeWeb, :router
+
   pipeline :api do
     plug :accepts, ["json"]
   end

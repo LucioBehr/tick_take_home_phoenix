@@ -6,7 +6,7 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :tick_take_home, TickTakeHome.Repo,
-  username: "postgres",
+  username: "macbook",
   password: "postgres",
   hostname: "localhost",
   database: "tick_take_home_test#{System.get_env("MIX_TEST_PARTITION")}",

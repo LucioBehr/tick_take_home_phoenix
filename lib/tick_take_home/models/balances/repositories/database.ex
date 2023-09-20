@@ -4,14 +4,14 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
   import Ecto.Query
 
   def get_balance(user_id, asset) do
-    case Repo.one(from b in Balance, where: b.user_id == ^user_id and b.asset_id == ^asset)  do
+    case Repo.one(from b in Balance, where: b.user_id == ^user_id and b.asset_id == ^asset) do
       nil -> {:error, :no_balance}
       balance -> {:ok, balance}
     end
   end
 
   def insert_balance(%{"user_id" => user_id, "asset_id" => asset, "available" => amount}) do
-    Repo.insert!(
+    Repo.insert(
       Balance.changeset(%Balance{}, %{
         "user_id" => user_id,
         "asset_id" => asset,
@@ -54,7 +54,13 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
   end
 
   #
-  def transfer(%{"from_user_id" => from_user_id, "to_user_id" => to_user_id, "asset" => asset, "amount" => amount}) when amount > 0 do
+  def transfer(%{
+        "from_user_id" => from_user_id,
+        "to_user_id" => to_user_id,
+        "asset" => asset,
+        "amount" => amount
+      })
+      when amount > 0 do
     Repo.transaction(fn ->
       deduct_from_sender(from_user_id, asset, amount)
       add_to_receiver(to_user_id, asset, amount)
@@ -66,10 +72,13 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
     new_available = balance.available - amount
 
     case new_available >= 0 do
-      true ->  # Deduct the amount and update
+      # Deduct the amount and update
+      true ->
         changeset = Balance.changeset(balance, %{"available" => new_available})
         Repo.update!(changeset)
-      false -> {:error, :no_funds}
+
+      false ->
+        {:error, :no_funds}
     end
   end
 
@@ -77,7 +86,11 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
     balance = Repo.get_by(Balance, user_id: user_id, asset_id: asset_id)
 
     case balance do
-      nil -> insert_balance(%{"user_id" => user_id, "asset_id" => asset_id, "available" => amount})
+      nil ->
+        {:ok, new_balance} =
+          insert_balance(%{"user_id" => user_id, "asset_id" => asset_id, "available" => amount})
+
+        new_balance
 
       _ ->
         new_available = balance.available + amount

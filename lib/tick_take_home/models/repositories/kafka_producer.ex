@@ -8,9 +8,20 @@ defmodule TickTakeHome.Models.Repositories.KafkaProducer do
   def start_producer, do: :brod.start_producer(@client, @topic, [])
 
   def create_topic(topic_name, partitions) do
-    :brod.create_topics([{"localhost", 9092}],
-    [%{name: topic_name, num_partitions: partitions, replication_factor: 1, assignments: [], configs: [ %{name: <<"cleanup.policy">>, value: "compact"}]}],
-    %{timeout: 1000}, [])
+    :brod.create_topics(
+      [{"localhost", 9092}],
+      [
+        %{
+          name: topic_name,
+          num_partitions: partitions,
+          replication_factor: 1,
+          assignments: [],
+          configs: [%{name: <<"cleanup.policy">>, value: "compact"}]
+        }
+      ],
+      %{timeout: 1000},
+      []
+    )
   end
 
   def operation(value) do
