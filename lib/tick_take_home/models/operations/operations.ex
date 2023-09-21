@@ -6,7 +6,7 @@ defmodule TickTakeHome.Models.Operations do
   def start_operation(%{wallet_id: wallet_id, operation: "create_user"} = message_attrs) do
     case is_integer(wallet_id) do
       # if true send to kafka producer and return a message "User creation request sent"
-      true -> KafkaProducer.operation(message_attrs)
+      true -> {KafkaProducer.operation(message_attrs)}
               {:ok, "User creation request sent"}
       false -> {:error, "wallet_id must be an integer"}
     end
