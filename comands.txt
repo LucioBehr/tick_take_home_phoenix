@@ -1,0 +1,43 @@
+create
+{
+  "wallet_id": 1
+}
+
+deposit
+{
+  "user_id": 14,
+  "asset": "BTC",
+  "amount": 100,
+  "wallet_id": 1,
+}
+
+withdraw
+{
+  "user_id": 14,
+  "asset": "BTC",
+  "amount": 10,
+  "operation": "withdraw"
+}
+
+freeze
+{
+  "user_id": 14,
+  "asset": "BTC",
+  "amount": "10"
+  "operation": "deposit"
+}
+
+unfreeze
+{
+  "user_id": 14,
+  "asset": "BTC",
+  "amount": "10"
+}
+
+transfer
+{
+  "from_user_id": 14,
+  "to_user_id": 15,
+  "asset": "BTC",
+  "amount": 10
+}

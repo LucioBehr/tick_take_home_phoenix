@@ -1,10 +1,21 @@
-defmodule TickTakeHome.Models.Repositories.KafkaConsumer do
+defmodule TickTakeHome.KafkaConsumer do
   @behaviour :brod_group_subscriber
 
-  def init(group_id, _args) do
-    IO.puts("Consumer initialized for group: #{group_id}")
+  def child_spec(opts) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [opts]},
+      type: :worker,
+      restart: :permanent,
+      shutdown: 500
+    }
+  end
+
+  def init(_, _args) do
     {:ok, nil}
   end
+
+  def start_link(_), do: start_consumer()
 
   def start_consumer do
     :brod.start_link_group_subscriber(
@@ -13,7 +24,7 @@ defmodule TickTakeHome.Models.Repositories.KafkaConsumer do
       ["first"],
       [],
       [],
-      TickTakeHome.Models.Repositories.KafkaConsumer,
+      TickTakeHome.KafkaConsumer,
       []
     )
   end
@@ -51,12 +62,10 @@ defmodule TickTakeHome.Models.Repositories.KafkaConsumer do
     case operation do
       "deposit" -> TickTakeHome.deposit(message)
       "create_user" -> TickTakeHome.create_user(message["wallet_id"])
-      # |> Map.put("wallet_id", message["wallet_id"])
-      # |> TickTakeHome.deposit()
-      # "withdraw" -> TickTakeHome.withdraw(general_message)
-      # "freeze" -> TickTakeHome.freeze(general_message)
-      # "unfreeze" -> TickTakeHome.unfreeze(general_message)
-      "transfer" -> TickTakeHome.transfer(message)
+      "withdraw" -> TickTakeHome.withdraw(%{"user_id" => message["user_id"], "asset" => message["asset"], "amount" => message["amount"]})
+      "freeze" -> TickTakeHome.freeze(%{"user_id" => message["user_id"], "asset" => message["asset"], "amount" => message["amount"]})
+      "unfreeze" -> TickTakeHome.unfreeze(%{"user_id" => message["user_id"], "asset" => message["asset"], "amount" => message["amount"]})
+      "transfer" -> TickTakeHome.transfer(%{"from_user_id" => message["from_user_id"], "to_user_id" => message["to_user_id"], "asset" => message["asset"], "amount" => message["amount"]})
       _ -> IO.puts("Operation not supported")
     end
   end

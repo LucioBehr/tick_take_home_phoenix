@@ -9,7 +9,8 @@ defmodule TickTakeHome.Application do
     children = [
       TickTakeHome.Repo,
       {Phoenix.PubSub, name: TickTakeHome.PubSub},
-      TickTakeHomeWeb.Endpoint
+      TickTakeHomeWeb.Endpoint,
+      TickTakeHome.KafkaConsumer
       # {TickTakeHomeWeb.Wallet, name: :wallet_1},
       # {TickTakeHomeWeb.Wallet, name: :wallet_2},
       # TickTakeHomeWeb.TransactionCoordinator

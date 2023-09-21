@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :tick_take_home, TickTakeHome.Repo,
-  username: "macbook",
+  username: "postgres",
   password: "postgres",
   hostname: "localhost",
   database: "tick_take_home_dev",

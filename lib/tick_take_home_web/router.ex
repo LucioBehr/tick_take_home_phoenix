@@ -7,6 +7,7 @@ defmodule TickTakeHomeWeb.Router do
 
   scope "/", TickTakeHomeWeb do
     pipe_through :api
+    post "/create_user", TickTakeHomeController, :create_user
     post "/deposit", TickTakeHomeController, :deposit
     post "/withdraw", TickTakeHomeController, :withdraw
     post "/transfer", TickTakeHomeController, :transfer

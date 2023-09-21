@@ -10,7 +10,7 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
     end
   end
 
-  def insert_balance(%{"user_id" => user_id, "asset_id" => asset, "available" => amount}) do
+  def insert_balance(%{"user_id" => user_id, "asset" => asset, "available" => amount}) do
     Repo.insert(
       Balance.changeset(%Balance{}, %{
         "user_id" => user_id,
