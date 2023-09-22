@@ -28,6 +28,7 @@ defmodule TickTakeHomeWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import TickTakeHomeWeb.ConnCase
+      import Mock
     end
   end
 

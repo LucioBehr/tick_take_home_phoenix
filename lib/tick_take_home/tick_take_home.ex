@@ -41,7 +41,9 @@ defmodule TickTakeHome do
     end
   end
 
-  def withdraw(%{"user_id" => _user_id, "asset" => _asset, "amount" => _amount} = params), do: handle_operation(params, :withdraw)
+  def withdraw(%{"user_id" => _user_id, "asset" => _asset, "amount" => _amount} = params),
+    do: handle_operation(params, :withdraw)
+
   def freeze(params), do: handle_operation(params, :freeze)
   def unfreeze(params), do: handle_operation(params, :unfreeze)
 
@@ -77,11 +79,11 @@ defmodule TickTakeHome do
   end
 
   def insert_balance(%{
-         "user_id" => user_id,
-         "asset" => asset,
-         "amount" => amount,
-         "wallet_id" => _
-       }) do
+        "user_id" => user_id,
+        "asset" => asset,
+        "amount" => amount,
+        "wallet_id" => _
+      }) do
     Balances.insert_balance(%{
       "user_id" => user_id,
       "asset" => asset,

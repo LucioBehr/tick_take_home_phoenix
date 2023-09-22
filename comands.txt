@@ -16,7 +16,6 @@ withdraw
   "user_id": 14,
   "asset": "BTC",
   "amount": 10,
-  "operation": "withdraw"
 }
 
 freeze
@@ -24,7 +23,6 @@ freeze
   "user_id": 14,
   "asset": "BTC",
   "amount": "10"
-  "operation": "deposit"
 }
 
 unfreeze
@@ -41,3 +39,20 @@ transfer
   "asset": "BTC",
   "amount": 10
 }
+%{"from_user_id" => 14, "to_user_id" => 15, "asset" => "BTC", "amount" => 10}
+
+
+[error] GenServer #PID<0.876.0> terminating
+** (FunctionClauseError) no function clause matching in TickTakeHome.Models.Balances.Repositories.Database.insert_balance/1
+    (tick_take_home 0.1.0) TickTakeHome.Models.Balances.Repositories.Database.insert_balance(%{"asset_id" => "BTC", "available" => 10.0, "user_id" => 2})
+    (tick_take_home 0.1.0) lib/tick_take_home/models/balances/repositories/database.ex:91: TickTakeHome.Models.Balances.Repositories.Database.add_to_receiver/3
+    (ecto_sql 3.10.2) lib/ecto/adapters/sql.ex:1352: anonymous fn/3 in Ecto.Adapters.SQL.checkout_or_transaction/4
+    (db_connection 2.5.0) lib/db_connection.ex:1630: DBConnection.run_transaction/4
+    (tick_take_home 0.1.0) lib/tick_take_home/kafka_consumer.ex:45: TickTakeHome.KafkaConsumer.handle_message/4
+    (brod 3.17.0) /Users/chrystian/dev/elixir/quiver-project-0/tick_take_home_phoenix/deps/brod/src/brod_group_subscriber.erl:532: :brod_group_subscriber.handle_messages/4
+    (brod 3.17.0) /Users/chrystian/dev/elixir/quiver-project-0/tick_take_home_phoenix/deps/brod/src/brod_group_subscriber.erl:325: :brod_group_subscriber.handle_info/2
+    (stdlib 5.0.2) gen_server.erl:1077: :gen_server.try_handle_info/3
+    (stdlib 5.0.2) gen_server.erl:1165: :gen_server.handle_msg/6
+    (stdlib 5.0.2) proc_lib.erl:241: :proc_lib.init_p_do_apply/3
+Last message: {:EXIT, #PID<0.875.0>, {:function_clause, [{TickTakeHome.Models.Balances.Repositories.Database, :insert_balance, [%{"asset_id" => "BTC", "available" => 10.0, "user_id" => 2}], []}, {TickTakeHome.Models.Balances.Repositories.Database, :add_to_receiver, 3, [file: ~c"lib/tick_take_home/models/balances/repositories/database.ex", line: 91]}, {Ecto.Adapters.SQL, :"-checkout_or_transaction/4-fun-0-", 3, [file: ~c"lib/ecto/adapters/sql.ex", line: 1352]}, {DBConnection, :run_transaction, 4, [file: ~c"lib/db_connection.ex", line: 1630]}, {TickTakeHome.KafkaConsumer, :handle_message, 4, [file: ~c"lib/tick_take_home/kafka_consumer.ex", line: 45]}, {:brod_group_subscriber, :handle_messages, 4, [file: ~c"/Users/chrystian/dev/elixir/quiver-project-0/tick_take_home_phoenix/deps/brod/src/brod_group_subscriber.erl", line: 532]}, {:brod_group_subscriber, :handle_info, 2, [file: ~c"/Users/chrystian/dev/elixir/quiver-project-0/tick_take_home_phoenix/deps/brod/src/brod_group_subscriber.erl", line: 325]}, {:gen_server, :try_handle_info, 3, [file: ~c"gen_server.erl", line: 1077]}, {:gen_server, :handle_msg, 6, [file: ~c"gen_server.erl", line: 1165]}, {:proc_lib, :init_p_do_apply, 3, [file: ~c"proc_lib.erl", line: 241]}]}}
+State: {:state, :kafka_client, "my_consumer_group", "nonode@nohost/<0.876.0>-f3f93e86-64f8-4c9d-8b30-51acdb6e55a9", "nonode@nohost/<0.876.0>-f3f93e86-64f8-4c9d-8b30-51acdb6e55a9", 5, ["first"], #PID<0.878.0>, :undefined, [{"nonode@nohost/<0.876.0>-f3f93e86-64f8-4c9d-8b30-51acdb6e55a9", {:kafka_group_member_metadata, 0, ["first"], ""}}], true, #PID<0.875.0>, :brod_group_subscriber, [], #Reference<0.3463720487.3745513475.81747>, :roundrobin_v2, 30, 30, 5, 5, 1, :undefined, :commit_to_kafka_v2, 5, :roundrobin_v2}

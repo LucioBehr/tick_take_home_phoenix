@@ -10,7 +10,7 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
     end
   end
 
-  def insert_balance(%{"user_id" => user_id, "asset" => asset, "available" => amount}) do
+  def insert_balance(%{"user_id" => user_id, "asset" => asset, "available" => amount} = balance) do
     Repo.insert(
       Balance.changeset(%Balance{}, %{
         "user_id" => user_id,
@@ -88,7 +88,7 @@ defmodule TickTakeHome.Models.Balances.Repositories.Database do
     case balance do
       nil ->
         {:ok, new_balance} =
-          insert_balance(%{"user_id" => user_id, "asset_id" => asset_id, "available" => amount})
+          insert_balance(%{"user_id" => user_id, "asset" => asset_id, "available" => amount})
 
         new_balance
 

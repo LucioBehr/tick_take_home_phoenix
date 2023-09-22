@@ -50,7 +50,8 @@ defmodule TickTakeHome.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:brod, "~> 3.15"}
+      {:brod, "~> 3.15"},
+      {:mock, "~> 0.3.0", only: :test}
     ]
   end
 

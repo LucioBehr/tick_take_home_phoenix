@@ -15,5 +15,6 @@ defmodule TickTakeHome.Models.Users.Schema.User do
     user
     |> cast(params, [:id, :wallet_id])
     |> validate_required([:wallet_id])
+    |> foreign_key_constraint(:wallet_id, name: "users_wallet_id_fkey")
   end
 end

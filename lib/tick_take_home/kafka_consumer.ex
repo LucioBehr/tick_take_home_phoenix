@@ -60,13 +60,43 @@ defmodule TickTakeHome.KafkaConsumer do
     # transfer_message = %{"from_user_id" => message["user_id_from"], "to_user_id" => message["user_id_to"], "asset" => message["asset_id"], "amount" => message["amount"]}
 
     case operation do
-      "deposit" -> TickTakeHome.deposit(message)
-      "create_user" -> TickTakeHome.create_user(message["wallet_id"])
-      "withdraw" -> TickTakeHome.withdraw(%{"user_id" => message["user_id"], "asset" => message["asset"], "amount" => message["amount"]})
-      "freeze" -> TickTakeHome.freeze(%{"user_id" => message["user_id"], "asset" => message["asset"], "amount" => message["amount"]})
-      "unfreeze" -> TickTakeHome.unfreeze(%{"user_id" => message["user_id"], "asset" => message["asset"], "amount" => message["amount"]})
-      "transfer" -> TickTakeHome.transfer(%{"from_user_id" => message["from_user_id"], "to_user_id" => message["to_user_id"], "asset" => message["asset"], "amount" => message["amount"]})
-      _ -> IO.puts("Operation not supported")
+      "deposit" ->
+        TickTakeHome.deposit(message)
+
+      "create_user" ->
+        TickTakeHome.create_user(message["wallet_id"])
+
+      "withdraw" ->
+        TickTakeHome.withdraw(%{
+          "user_id" => message["user_id"],
+          "asset" => message["asset"],
+          "amount" => message["amount"]
+        })
+
+      "freeze" ->
+        TickTakeHome.freeze(%{
+          "user_id" => message["user_id"],
+          "asset" => message["asset"],
+          "amount" => message["amount"]
+        })
+
+      "unfreeze" ->
+        TickTakeHome.unfreeze(%{
+          "user_id" => message["user_id"],
+          "asset" => message["asset"],
+          "amount" => message["amount"]
+        })
+
+      "transfer" ->
+        TickTakeHome.transfer(%{
+          "from_user_id" => message["from_user_id"],
+          "to_user_id" => message["to_user_id"],
+          "asset" => message["asset"],
+          "amount" => message["amount"]
+        })
+
+      _ ->
+        IO.puts("Operation not supported")
     end
   end
 end

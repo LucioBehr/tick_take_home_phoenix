@@ -19,7 +19,7 @@ defmodule TickTakeHome.Models.Balances.BalancesTest do
 
   def insert_balance(%{user: user}),
     do:
-      Balances.insert_balance(%{"user_id" => user.id, "asset_id" => "BTC", "available" => 100})
+      Balances.insert_balance(%{"user_id" => user.id, "asset" => "BTC", "available" => 100})
       |> then(fn {:ok, balance} -> %{balance: balance} end)
 
   describe "insert_balance/1" do
@@ -27,7 +27,7 @@ defmodule TickTakeHome.Models.Balances.BalancesTest do
 
     test "it should insert a valid balance", %{wallet: wallet, user: user} do
       result =
-        Balances.insert_balance(%{"user_id" => user.id, "asset_id" => "BTC", "available" => 100})
+        Balances.insert_balance(%{"user_id" => user.id, "asset" => "BTC", "available" => 100})
 
       user_id = user.id
 
@@ -37,7 +37,7 @@ defmodule TickTakeHome.Models.Balances.BalancesTest do
 
     test "it should return an invalid user id", %{wallet: wallet, user: user} do
       result =
-        Balances.insert_balance(%{"user_id" => 1234, "asset_id" => "BTC", "available" => 100})
+        Balances.insert_balance(%{"user_id" => 1234, "asset" => "BTC", "available" => 100})
 
       user_id = user.id
       assert {:error, %_{errors: [user_id: {"does not exist", _}]}} = result
@@ -45,7 +45,7 @@ defmodule TickTakeHome.Models.Balances.BalancesTest do
 
     test "it should return an invalid asset", %{wallet: wallet, user: user} do
       result =
-        Balances.insert_balance(%{"user_id" => user.id, "asset_id" => "aaa", "available" => 100})
+        Balances.insert_balance(%{"user_id" => user.id, "asset" => "aaa", "available" => 100})
 
       user_id = user.id
       assert {:error, %_{errors: [asset_id: {"does not exist", _}]}} = result
